@@ -30,13 +30,15 @@ X_input = T - param.Ts;
 if (errorcode ~= 0)
     warning('MPC6 infeasible');
 end
+
 disp(errorcode);
 p = u_mpc{1} + param.ps;
 
 % observer update
 y = T;
 estimator = Aaug*[param.x_hat;param.d_hat] +...
-            L*(y-Caug*[param.x_hat;param.d_hat])+Baug*p;
+            L*(y-Caug*[param.x_hat;param.d_hat])+...
+            Baug*p;
 param.x_hat = estimator(1:3);
 param.d_hat = estimator(4:6);
 
@@ -45,8 +47,8 @@ steady_state = [param.A - eye(3), param.B; eye(3), zeros(3)]...
     \ [-param.Bd * param.d_hat; param.T_sp];
 param.Ts = steady_state(1:3);
 % param.Ts = param.T_sp;
-% param.ps = steady_state(4:6);
-param.ps = param.p_sp;
+param.ps = steady_state(4:6);
+% param.ps = param.p_sp;
 
 
 % disp(y);
@@ -70,7 +72,8 @@ param.Ts = param.T_sp;
 param.ps = param.p_sp;
 
 param.x_hat = param.T_sp;
-param.d_hat = param.d;
+% param.d_hat = param.d;
+param.d_hat = [3.2e4, 0, 0]';
 
 % implement your MPC using Yalmip here
 nx = size(param.A,1);
