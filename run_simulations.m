@@ -27,12 +27,14 @@ disp('Unconstraint optimal control');
 T0 = T_sp;
 % simulate_building(T0);
 
+% ====================== task 7 ============================
 % Tuning of LQR on first initial condition T_init^(1)
 T0_1 = T_sp+[-2.25;1.75;0.75];
 % [Q_1,R_1] = heuristic_LQR_tuning(2500, T0_1, T_sp, scen1);
 % figure(3); set(gcf, 'WindowStyle' ,'docked');
 % simulate_building(T0_1, @controller_lqr, Q_1, R_1, scen1, 1);
 
+% ====================== task 8 ============================
 % Tuning of LQR on second initial condition T_init^(2)
 T0_2 = T_sp+[1.5;2.75;-0.25];
 % [Q_2,R_2] = heuristic_LQR_tuning(2500, T0_2, T_sp, scen1);
@@ -103,14 +105,16 @@ N=30;
 
 %% Offset-free MPC
 disp('Offset-free MPC');
+% ===================== task 23 =============================
 % figure(16); set(gcf, 'WindowStyle' ,'docked');
-simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen1,1);
-% figure(17); set(gcf, 'WindowStyle' ,'docked');
-% simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen2,1);
-% figure(18); set(gcf, 'WindowStyle' ,'docked');
 % simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen3,1);
 % pause;
 % 
 % 
 %% Comparison using forces
-% disp('MPC Implementation with FORCES Pro');
+disp('MPC Implementation with FORCES Pro');
+% ===================== task 24 =============================
+% [~, ~, ~, t_sim_forces] = simulate_building(T0_2, @controller_mpc_1_forces, Q_2, R_2, scen1);
+% [~, ~, ~, t_sim] = simulate_building(T0_2, @controller_mpc_1, Q_2, R_2, scen1);
+% fprintf("FORCES MPC: %f s", t_sim_forces);
+% fprintf("NORMAL MPC: %f s", t_sim);

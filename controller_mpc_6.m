@@ -18,11 +18,15 @@ if isempty(param)
     Aaug = [param.A,param.Bd; zeros(3), eye(3)]; 
     Caug = [param.C_ref, zeros(3)];
     Baug = [param.B;zeros(3)];
-    P = [0.8,0.8,0.8,0.0,0.0,0.0];
+    P = [0.9, 0.9, 0.9, 0.0, 0.0, 0.0];
     L = (place(Aaug',Caug',P))';
     M = [param.A-eye(3),param.B;eye(3),zeros(3)];
 end
 
+% compute steady state
+steady_state = M \ [-param.Bd*param.d_hat;param.T_sp];
+param.xs = steady_state(1:3);
+param.us = steady_state(4:6);
 
 X_input = T - param.xs;
 
@@ -32,7 +36,6 @@ if (errorcode ~= 0)
     warning('MPC6 infeasible');
 end
 p = u_mpc{1} + param.us;
-
 % observer update
 y = T;
 % set point update
@@ -42,18 +45,13 @@ param.x_hat = estimator(1:3);
 param.d_hat =  estimator(4:6);
 disp(param.d_hat);
 
-% compute steady state
-steady_state = M \ [-param.Bd*param.d_hat;param.T_sp];
-param.xs = steady_state(1:3);
-param.us = steady_state(4:6);
-
 end
 
 function [param, yalmip_optimizer] = init(Q,R,T,N)
 % get basic controller parameters
 param = compute_controller_base_parameters;
 % get terminal cost
-[P_f,K,G]=idare(param.A,param.B,Q,R,zeros(3),eye(3));
+[P_f,~,~]=idare(param.A,param.B,Q,R,zeros(3),eye(3));
 % get terminal set
 [A_x,b_x]=compute_X_LQR(Q,R);
 % design disturbance observer
@@ -62,7 +60,7 @@ param = compute_controller_base_parameters;
 param.xs=param.T_sp;
 param.us=param.p_sp;
 param.x_hat=param.T_sp;
-param.d_hat=[1.43e-5;1.54e-4;4.62e-4];
+param.d_hat=[3e4;0;0];
 % implement your MPC using Yalmip here
 nx = size(param.A,1);
 nu = size(param.B,2);
@@ -78,7 +76,8 @@ xmin = Xcons(:, 1);
 xmax = Xcons(:, 2);
 objective = 0;
 objective = objective + X{1}' * Q * X{1} + U{1}' * R * U{1};
-constraints = [X{2} == param.A * X{1} + param.B * U{1}, umin<= U{1}<=umax];
+constraints = [X{2} == param.A * X{1} + param.B * U{1}, xmin<=X{1}<=xmax,...
+               umin<= U{1}<=umax];
 for k = 2:N-1
     constraints = [constraints, umin<=U{k}<=umax, xmin<=X{k}<=xmax,...
                    X{k+1}==param.A*X{k}+param.B*U{k}];
