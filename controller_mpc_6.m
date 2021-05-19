@@ -71,9 +71,10 @@ param = compute_controller_base_parameters;
 param.Ts = param.T_sp;
 param.ps = param.p_sp;
 
-param.x_hat = param.T_sp;
-% param.d_hat = param.d;
-param.d_hat = [3.2e4, 0, 0]';
+% param.x_hat = param.T_sp;
+param.x_hat = T;
+param.d_hat = param.d;
+% param.d_hat = [3.555e4, 0, 0]';
 
 % implement your MPC using Yalmip here
 nx = size(param.A,1);

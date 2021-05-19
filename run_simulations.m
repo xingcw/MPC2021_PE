@@ -104,7 +104,7 @@ N=30;
 %% Offset-free MPC
 disp('Offset-free MPC');
 % figure(16); set(gcf, 'WindowStyle' ,'docked');
-simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen1,1);
+simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen3,1);
 % figure(17); set(gcf, 'WindowStyle' ,'docked');
 % simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen2,1);
 % figure(18); set(gcf, 'WindowStyle' ,'docked');
