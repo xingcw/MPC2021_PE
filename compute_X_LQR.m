@@ -12,7 +12,20 @@ function [A_x, b_x] = compute_X_LQR(Q, R)
     % implement the X_LQR computation and assign the result
     A = param.A;
     B = param.B;
-    [P,~,~] = dare(A,B,Q,R);
+    [P,~,G] = dare(A,B,Q,R);
+    
+%     K = -G;
+%     systemLQR = LTISystem('A', param.A + param.B * K);
+%     
+%     A_x = [eye(3); -eye(3); K; -K];
+%     b_x = [param.Xcons(:,2); -param.Xcons(:,1);
+%            param.Ucons(:,2); -param.Ucons(:,1)];
+%        
+%     Xp = Polyhedron('A', A_x, 'b', b_x);
+%     systemLQR.x.with('setConstraint');
+%     systemLQR.x.setConstraint = Xp;
+%     InvSetLQR = systemLQR.invariantSet()
+    
     % Discrete-time LQR controller
     K_E = -1*inv(R + B.'*P*B)*B.'*P*A;
     A_c = A+B*K_E;
