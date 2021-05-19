@@ -104,7 +104,7 @@ N=30;
 %% Offset-free MPC
 disp('Offset-free MPC');
 % figure(16); set(gcf, 'WindowStyle' ,'docked');
-simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen3,1);
+% simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen3,1);
 % figure(17); set(gcf, 'WindowStyle' ,'docked');
 % simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen2,1);
 % figure(18); set(gcf, 'WindowStyle' ,'docked');
@@ -114,3 +114,8 @@ simulate_building(T0_1,@controller_mpc_6,Q_1,R_1,scen3,1);
 % 
 %% Comparison using forces
 % disp('MPC Implementation with FORCES Pro');
+% [~, ~, ~, t_sim] = simulate_building(T0_2, @controller_mpc_1, Q_2, R_2, scen1);
+% fprintf("Ordinary MPC: %f s", t_sim);
+% 
+[~, ~, ~, t_sim_forces] = simulate_building(T0_2, @controller_mpc_1_forces, Q_2, R_2, scen1);
+fprintf("FORCES MPC: %f s", t_sim_forces);
