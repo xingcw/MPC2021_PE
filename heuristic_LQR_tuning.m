@@ -40,5 +40,6 @@ for index = 1:n_samples
     Q_idx = diag([randi([1,10e6]),randi([1,10e6]),randi([1,10e6])]);
 end
 % mark the corresponding scatter point for the resulting Q
-scatter(best_power_sum, best_dT_relative, [], 'filled', 'r');
+scatter(best_power_sum, best_dT_relative, [], 'filled', 'y');
+text(best_power_sum-0.05, best_dT_relative-0.01, 'Q');
 end
